@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/var/www/html
+    networks:
+      - php-network
+#  mysql:
+#    image: mysql:8.0
+#    expose:
+#      - "3306"
+#    ports:
+#      - "33061:3306"
+#    environment:
+#      MYSQL_ROOT_PASSWORD: password
+#    volumes:
+#      - ./docker-data/mysql:/var/lib/mysql
+#    networks:
+#      - php-network
+
+networks:
+  php-network:
+    driver: bridge
