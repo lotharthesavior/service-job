@@ -82,18 +82,19 @@ RUN chmod +x /etc/supervisor/conf.d/supervisord.conf
 # =====================================
 # Build app
 # =====================================
-#COPY . /var/www/html
-#RUN npm install
-#RUN npm run build
-#RUN composer install --no-interaction
-#RUN php artisan key:generate
-#RUN rm -f database/database.sqlite \
-#    && touch database/database.sqlite
-#RUN chown -R www-data:www-data /var/www/html/storage
-#RUN chown -R www-data:www-data /var/www/html/database
-#RUN chown -R www-data:www-data /var/www/html/bootstrap/cache
-#RUN chown -R www-data:www-data /var/www/html/public
-#RUN php artisan migrate:fresh --seed
+COPY . /var/www/html
+RUN npm install
+RUN npm run build
+RUN composer install --no-interaction
+RUN php artisan key:generate --no-interaction
+RUN rm -f database/database.sqlite \
+    && touch database/database.sqlite
+RUN mkdir -p /var/www/html/storage/logs
+RUN chown -R www-data:www-data /var/www/html/storage
+RUN chown -R www-data:www-data /var/www/html/database
+RUN chown -R www-data:www-data /var/www/html/bootstrap/cache
+RUN chown -R www-data:www-data /var/www/html/public
+RUN php artisan migrate:fresh --seed --force
 
 # Start supervisor
 CMD ["/usr/bin/supervisord"]

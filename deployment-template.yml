@@ -1,32 +1,6 @@
 # ===========================================
-# WordPress Deployment
+# Deployment
 # ===========================================
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: job-services-pv
-spec:
-  accessModes:
-    - ReadWriteMany
-  capacity:
-    storage: 10Gi
-  persistentVolumeReclaimPolicy: Retain
-  storageClassName: local-storage
-  hostPath:
-    path: /var/data/job-services-storage
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: job-services-pvc
-spec:
-  accessModes:
-    - ReadWriteMany
-  resources:
-    requests:
-      storage: 10Gi
-  storageClassName: local-storage
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -55,13 +29,6 @@ spec:
           image: registry.savioresende.com/job-services:DEPLOYMENT_VERSION
           ports:
             - containerPort: 8080
-          volumeMounts:
-            - name: job-services-pv
-              mountPath: /var/www/html/storage
       imagePullSecrets:
         - name: myregistrykey # this is at the k8s environment
-      volumes:
-        - name: job-services-pv
-          persistentVolumeClaim:
-            claimName: job-services-pvc
 
